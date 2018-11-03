@@ -20,24 +20,18 @@ Private Function ReadINILoc(loc)
 	objTextFile.Close
 End Function
 
+Dim test_path, test_file, test_enc
 
 test1 = ReadINILoc("KP1_PATH")
-intLineFinder = InStr(test1, "=")
-'print1=MsgBox(intLineFinder)
-Dim test_path
-test_path = Mid(test1, intLineFinder + 1)
+test_path = Mid(test1, (InStr(test1, "=")) + 1)
 print2=MsgBox(test_path)
 
 test2 = ReadINILoc("KP1_FILE")
-intLineFinder = InStr(test2, "=")
-'print1=MsgBox(intLineFinder)
-Dim test_file
-test_file = Mid(test2, intLineFinder + 1)
+test_file = Mid(test2, (InStr(test2, "=")) + 1)
 print3=MsgBox(test_file)
 
 test3 = ReadINILoc("KP1_ENCRYPT_HASH")
-intLineFinder = InStr(test3, "=")
-'print1=MsgBox(intLineFinder)
-Dim test_enc
-test_enc = Mid(test3, intLineFinder + 1)
+test_enc = Mid(test3, (InStr(test3, "=")) + 1)
 print4=MsgBox(test_enc)
+
+'print1=MsgBox(intLineFinder)
