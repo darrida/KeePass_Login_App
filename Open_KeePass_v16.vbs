@@ -30,7 +30,7 @@ Set objFSO = wscript.CreateObject("Scripting.FileSystemObject")
 '	objTextFile.Close
 'End Function
 
-Private Function ReadINILoc(loc)
+Private Function ReadINI(search)
 	Const ForReading = 1
 	Const ForWriting = 2
 	
@@ -39,7 +39,7 @@ Private Function ReadINILoc(loc)
 	
 	Do Until objTextFile.AtEndOfStream
 		strNextLine = objTextFile.Readline
-		intLineFinder = InStr(strNextLine, loc)
+		intLineFinder = InStr(strNextLine, search)
 		If intLineFinder <> 0 Then
 			ReadINILoc = strNextLine
 		End If
@@ -48,43 +48,6 @@ Private Function ReadINILoc(loc)
 	objTextFile.Close
 End Function
 
-Private Function ReadINIFile(file)
-	Const ForReading = 1
-	Const ForWriting = 2
-	
-	'Set objFSO = CreateObject("Scripting.FileSystemObject")
-	Set objTextFile = objFSO.OpenTextFile("keepass_login_config.ini", ForReading)
-
-	Do Until objTextFile.AtEndOfStream
-		strNextLine = objTextFile.Readline
-		intLineFinder = InStr(strNextLine, file)
-		If intLineFinder <> 0 Then
-			ReadINIFile = strNextLine
-		End If
-	Loop
-	
-	objTextFile.Close
-End Function
-
-Private Function ReadINIPass(passwd)
-	Const ForReading = 1
-	Const ForWriting = 2
-	
-	'Set objFSO = CreateObject("Scripting.FileSystemObject")
-	Set objTextFile = objFSO.OpenTextFile("keepass_login_config.ini", ForReading)
-
-	Do Until objTextFile.AtEndOfStream
-		strNextLine = objTextFile.Readline
-		intLineFinder = InStr(strNextLine, passwd)
-		If intLineFinder <> 0 Then
-			ReadINIPass = strNextLine
-		End If
-	Loop
-	
-	objTextFile.Close
-End Function
-
-
 
 KPLocation = "C:\KeePass-Modified\"
 KPFileName = "Keepass.exe"
@@ -92,25 +55,25 @@ DecryptFileLoc =
 DecryptFile = "Decrypt_pass1.vbs"
 
 'KeePass Files without a key
-TACFileLoc = 
-TACFile = 
-TACFilepw = 
+'FileLoc1 = 
+'File1 = 
+'Filepw1 = 
 
-test1 = ReadINILoc("KP1_PATH")
+test1 = ReadINI("KP1_PATH")
 intLineFinder = InStr(test1, "=")
 'print1=MsgBox(intLineFinder)
 Dim test_path
 test_path = Mid(test1, intLineFinder + 1)
 print2=MsgBox(test_path)
 
-test2 = ReadINIFile("KP1_FILE")
+test2 = ReadINI("KP1_FILE")
 intLineFinder = InStr(test2, "=")
 'print1=MsgBox(intLineFinder)
 Dim test_file
 test_file = Mid(test2, intLineFinder + 1)
 print3=MsgBox(test_file)
 
-test3 = ReadINIPass("KP1_ENCRYPT_HASH")
+test3 = ReadINI("KP1_ENCRYPT_HASH")
 intLineFinder = InStr(test3, "=")
 'print1=MsgBox(intLineFinder)
 Dim test_enc
@@ -118,11 +81,11 @@ test_enc = Mid(test3, intLineFinder + 1)
 print4=MsgBox(test_enc)
 
 'KeePass Files with a key
-ENTFileLoc = 
-ENTFile = 
-ENTFilepw = 
-ENTKeyLoc = 
-ENTKey = 
+'FileLoc3 = 
+'File3 = 
+'Filepw3 = 
+'KeyLoc3 = 
+'Key3 = 
 '*********************************
 ' For additional KeyPass files (NO key):
 '(1) Create 3 additional lines for each:
