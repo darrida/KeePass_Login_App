@@ -2,14 +2,15 @@ Dim objFile
 Set wshshell = wscript.createObject("wscript.shell")
 Set objFSO = wscript.CreateObject("Scripting.FileSystemObject")
 
+'
+'test1 = ReadINI("KP1_PATH")
+'test2 = ReadINI("KP1_FILE")
+'test3 = ReadINI("KP1_ENCRYPT_HASH")
+
 'KeePass Files without a key
 'FileLoc1 = 
 'File1 = 
 'Filepw1 = 
-
-'test1 = ReadINI("KP1_PATH")
-'test2 = ReadINI("KP1_FILE")
-'test3 = ReadINI("KP1_ENCRYPT_HASH")
 
 'KeePass Files with a key
 'FileLoc3 = 
