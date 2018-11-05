@@ -210,9 +210,9 @@ Private Function KPLogin_Key(location, filename, password, keylocation, keyfile)
 End Function
 
 Private Function DecryptFileExistOpen()
-	On Error Resume Next
 	DecryptFileLoc = ReadINI("DECRYPT_FILE_PATH")
 	DecryptFile = ReadINI("DECRYPT_FILE")
+	On Error Resume Next
 	
 	Set objFile = objFSO.OpenTextFile(DecryptFileLoc + DecryptFile, 1, ForReading)
 	If IsObject(objFile) Then
