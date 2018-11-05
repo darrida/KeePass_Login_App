@@ -33,27 +33,26 @@ strKey = "[encrypt key goes here]" + inputbox("Finish Decrypt Key") ' End of key
 intSeed = 6
 '******************************************************************************
 '** This information is passed from the primary 
-Function DecryptPass(EncryptedTextFile)
+Function DecryptPass(EncryptedText)
 	On Error Resume Next
-	Set objFSO = CreateObject("Scripting.FileSystemObject")
-	Set objFSO = CreateObject("Scripting.FileSystemObject")
-	'Set objFile3 = objFSO.OpenTextFile(Encrypted_Files_Location + EncryptedTextFile, 1)
-	Set objFile3 = objFSO.OpenTextFile(EncryptedTextFile, 1)
-	If IsObject(objFile3) Then
-		strDecrypt = objFile3.ReadAll
-		DecryptPass = Decrypt( strDecrypt, strKey, intSeed)
-	Else
-		'Set objFile3 = objFSO.OpenTextFile(Encrypted_Files_Location + "\" + EncryptedTextFile, 1)
-		Set objFile3 = objFSO.OpenTextFile(EncryptedTextFile, 1)
-		strDecrypt = objFile3.ReadAll
-		DecryptPass = Decrypt( strDecrypt, strKey, intSeed)
-	End If
-	If IsObject(objFile3) Then
-		Continue
-	Else
-		MsgBox "Enable to open decryption file. Make sure location and file names are correct."
-		wscript.Quit
-	End If
+	'Set objFSO = CreateObject("Scripting.FileSystemObject")
+	'Set objFSO = CreateObject("Scripting.FileSystemObject")
+	'Set objFile3 = objFSO.OpenTextFile(EncryptedTextFile, 1)
+	'If IsObject(objFile3) Then
+	'	strDecrypt = objFile3.ReadAll
+	'	DecryptPass = Decrypt( strDecrypt, strKey, intSeed)
+	'Else
+	'	'Set objFile3 = objFSO.OpenTextFile(Encrypted_Files_Location + "\" + EncryptedTextFile, 1)
+	'	Set objFile3 = objFSO.OpenTextFile(EncryptedTextFile, 1)
+	'	strDecrypt = objFile3.ReadAll
+		DecryptPass = Decrypt( EncryptedText, strKey, intSeed)
+	'End If
+	'If IsObject(objFile3) Then
+	'	Continue
+	'Else
+	'	MsgBox "Enable to open decryption file. Make sure location and file names are correct."
+	'	wscript.Quit
+	'End If
 End Function
 'wscript.echo DecryptPass(EncryptedTextFile)
 '******************************************************************************

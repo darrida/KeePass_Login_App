@@ -37,6 +37,16 @@ Set objFSO = wscript.CreateObject("Scripting.FileSystemObject")
 '(2) Add a new "Call" statement to the bottom of the main() function:
 '	Call KPLogin_Key([LocationFile], [KeePassDBName], [EncryptedPasswordText], [KeyLocation], [KeyFileName])
 '*********************************
+DecryptFileLoc = ReadINI("DECRYPT_FILE_PATH")
+print1=MsgBox(DecryptFileLoc)
+DecryptFile = ReadINI("DECRYPT_FILE")
+print1=MsgBox(DecryptFile)
+
+KPLocation = ReadINI("KEEPASS_PATH")
+print1=MsgBox(KPLocation)
+KPFileName = ReadINI("KEEPASS_APP")
+print1=MsgBox(KPFileName)
+
 KP1_PATH = ReadINI("KP1_PATH")
 KP1_FILE = ReadINI("KP1_FILE")
 KP1_ENCRYPT_HASH = ReadINI("KP1_ENCRYPT_HASH")
@@ -54,26 +64,25 @@ KP3_KEY = ReadINI("KP3_KEY")
 Call main()
 
 Private Function main()
-	test_path = ReadINI("KP1_PATH")
-	test_file = ReadINI("KP1_FILE")
-	test_enc = ReadINI("KP1_ENCRYPT_HASH")
-	Call DecryptFileExistOpen()
+	'test_path = ReadINI("KP1_PATH")
+	'test_file = ReadINI("KP1_FILE")
+	'test_enc = ReadINI("KP1_ENCRYPT_HASH")
+	'Call DecryptFileExistOpen()
 	Call OpenKP()
 	Call KPLogin(ReadINI("KP1_PATH"), ReadINI("KP1_FILE"), ReadINI("KP1_ENCRYPT_HASH"))
-	Call KPLogin(FileLoc2, File2, Filepw2)
+'	Call KPLogin(FileLoc2, File2, Filepw2)
 '	Call KPLogin(test_path, test_file, test_enc)
 '	Call KPLogin_Key(FileLoc3, File3, Filepw3, KeyLoc3, Key3)
 End Function
 
 Private Function OpenKP()
-	KPLocation = ReadINI("KEEPASS_PATH")
-	KPFileName = ReadINI("KEEPASS_APP")
+
 	On Error Resume Next
 	
 	If (wshshell.AppActivate("KeePass")) Then
 		wshshell.AppActivate "KeePass"
 	Else
-		KPexe = KPLocation + KPFileName
+		KPexe = ReadINI("KEEPASS_PATH") + ReadINI("KEEPASS_APP")
 		statusCode = wshshell.Run(KPexe, 1, false)
 		count1 = 0
 		Do Until wshshell.AppActivate("KeePass") 
@@ -90,7 +99,7 @@ Private Function OpenKP()
 	If IsObject(statusCode) Then
 		Continue
 	Else
-		KPexe = KPLocation + "\" + KPFileName
+		KPexe = ReadINI("KEEPASS_PATH") + "\" + ReadINI("KEEPASS_APP")
 		statusCode = wshshell.Run(KPexe, 1, false)
 	End If
 
@@ -225,8 +234,6 @@ Private Function KPLogin_Key(location, filename, password, keylocation, keyfile)
 End Function
 
 Private Function DecryptFileExistOpen()
-	DecryptFileLoc = ReadINI("DECRYPT_FILE_PATH")
-	DecryptFile = ReadINI("DECRYPT_FILE")
 	On Error Resume Next
 	
 	Set objFile = objFSO.OpenTextFile(DecryptFileLoc + DecryptFile, 1, ForReading)
