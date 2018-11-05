@@ -2,83 +2,14 @@ Dim objFile
 Set wshshell = wscript.createObject("wscript.shell")
 Set objFSO = wscript.CreateObject("Scripting.FileSystemObject")
 
-'Private Function ReadINI(loc, file, passwd)
-'	Const ForReading = 1
-'	Const ForWriting = 2
-'
-'	Set objFSO = CreateObject("Scripting.FileSystemObject")
-'	Set objTextFile = objFSO.OpenTextFile("sample.ini", ForReading)
-'
-'	Do Until objTextFile.AtEndOfStream
-'		strNextLine = objTextFile.Readline
-'		intLineFinder = InStr(strNextLine, "DisplayWelcomeDlg")
-'		If intLineFinder <> 0 Then
-'		strNextLine = "DisplayWelcomeDlg=NO"
-'		End If
-'	 	intLineFinder = InStr(strNextLine, "UserName")
-'		If intLineFinder <> 0 Then
-'			strNextLine = "UserName=" + path1
-'		End If
-'		strNewFile = strNewFile & strNextLine & vbCrLf
-'	Loop
-'
-'	objTextFile.Close
-'
-'	Set objTextFile = objFSO.OpenTextFile("sample.ini", ForWriting)
-'
-'	objTextFile.WriteLine strNewFile
-'	objTextFile.Close
-'End Function
-
-Private Function ReadINI(search)
-	Const ForReading = 1
-	Const ForWriting = 2
-	
-	'Set objFSO = CreateObject("Scripting.FileSystemObject")
-	Set objTextFile = objFSO.OpenTextFile("keepass_login_config.ini", ForReading)
-	
-	Do Until objTextFile.AtEndOfStream
-		strNextLine = objTextFile.Readline
-		intLineFinder = InStr(strNextLine, search)
-		If intLineFinder <> 0 Then
-			ReadINILoc = strNextLine
-		End If
-	Loop
-	
-	objTextFile.Close
-End Function
-
-
-KPLocation = "C:\KeePass-Modified\"
-KPFileName = "Keepass.exe"
-DecryptFileLoc = 
-DecryptFile = "Decrypt_pass1.vbs"
-
 'KeePass Files without a key
 'FileLoc1 = 
 'File1 = 
 'Filepw1 = 
 
-test1 = ReadINI("KP1_PATH")
-intLineFinder = InStr(test1, "=")
-'print1=MsgBox(intLineFinder)
-Dim test_path
-test_path = Mid(test1, intLineFinder + 1)
-print2=MsgBox(test_path)
-
-test2 = ReadINI("KP1_FILE")
-intLineFinder = InStr(test2, "=")
-'print1=MsgBox(intLineFinder)
-Dim test_file
-test_file = Mid(test2, intLineFinder + 1)
-print3=MsgBox(test_file)
-
-test3 = ReadINI("KP1_ENCRYPT_HASH")
-intLineFinder = InStr(test3, "=")
-'print1=MsgBox(intLineFinder)
-Dim test_enc
-test_enc = Mid(test3, intLineFinder + 1)
-print4=MsgBox(test_enc)
+'test1 = ReadINI("KP1_PATH")
+'test2 = ReadINI("KP1_FILE")
+'test3 = ReadINI("KP1_ENCRYPT_HASH")
 
 'KeePass Files with a key
 'FileLoc3 = 
@@ -108,9 +39,9 @@ print4=MsgBox(test_enc)
 Call main()
 
 Private Function main()
-	ReadINILoc("KP1_PATH")
-	ReadINIFile("KP1_FILE")
-	ReadINIPass("KP1_ENCRYPT_HASH")
+	test_path = ReadINI("KP1_PATH")
+	test_file = ReadINI("KP1_FILE")
+	test_enc = ReadINI("KP1_ENCRYPT_HASH")
 	Call DecryptFileExistOpen()
 	Call OpenKP()
 '	Call KPLogin(FileLoc1, File2, Filepw1)
@@ -120,6 +51,8 @@ Private Function main()
 End Function
 
 Private Function OpenKP()
+	KPLocation = ReadINI("KEEPASS_PATH")
+	KPFileName = ReadINI("KEEPASS_APP")
 	On Error Resume Next
 	
 	If (wshshell.AppActivate("KeePass")) Then
@@ -278,6 +211,9 @@ End Function
 
 Private Function DecryptFileExistOpen()
 	On Error Resume Next
+	DecryptFileLoc = ReadINI("DECRYPT_FILE_PATH")
+	DecryptFile = ReadINI("DECRYPT_FILE")
+	
 	Set objFile = objFSO.OpenTextFile(DecryptFileLoc + DecryptFile, 1, ForReading)
 	If IsObject(objFile) Then
 		Continue
@@ -293,4 +229,24 @@ Private Function DecryptFileExistOpen()
 	Set objFile = Nothing
 	Set objFSO = Nothing
 	ExecuteGlobal extFunctionsStr2
+End Function
+
+Private Function ReadINI(search)
+	Const ForReading = 1
+	Const ForWriting = 2
+	
+	'Set objFSO = CreateObject("Scripting.FileSystemObject")
+	Set objTextFile = objFSO.OpenTextFile("keepass_login_config.ini", ForReading)
+	
+	Do Until objTextFile.AtEndOfStream
+		strNextLine = objTextFile.Readline
+		intLineFinder = InStr(strNextLine, search)
+		If intLineFinder <> 0 Then
+			ReadINILoc = strNextLine
+			ReadINIIndex = InStr(ReadINILoc, "=")
+			ReadINIResult = Mid(ReadINIloc, ReadINIIndex + 1)
+		End If
+	Loop
+	ReadINI = ReadINIResult
+	objTextFile.Close
 End Function
