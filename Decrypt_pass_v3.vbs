@@ -30,7 +30,7 @@ Dim intSeed
 strKey = "[encrypt key goes here]" + inputbox("Finish Decrypt Key") ' End of key: *
 '******************************************************************************
 '** This is the seed that is used for randomizing the en/decryption
-intSeed = 6
+intSeed =   '<=[input seed number - single number is ok]
 '******************************************************************************
 '** This information is passed from the primary 
 Function DecryptPass(EncryptedText)
@@ -45,7 +45,7 @@ Function DecryptPass(EncryptedText)
 	'	'Set objFile3 = objFSO.OpenTextFile(Encrypted_Files_Location + "\" + EncryptedTextFile, 1)
 	'	Set objFile3 = objFSO.OpenTextFile(EncryptedTextFile, 1)
 	'	strDecrypt = objFile3.ReadAll
-		DecryptPass = Decrypt( EncryptedText, strKey, intSeed)
+		DecryptPass = Decrypt(EncryptedText, strKey, intSeed)
 	'End If
 	'If IsObject(objFile3) Then
 	'	Continue
