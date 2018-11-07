@@ -26,10 +26,40 @@ Call main()
 
 Private Function main()
 	Call DecryptFileExistOpen()
-	Call OpenKP()
-	Call KPLogin(ReadINI(KP1_PATH), ReadINI("KP1_FILE"), ReadINI("KP1_ENCRYPT_HASH"))
-	'Call KPLogin(ReadINI(KP2_PATH), ReadINI("KP2_FILE"), ReadINI("KP2_ENCRYPT_HASH"))
-	'Call KPLogin_Key(ReadINI(KP3_PATH), ReadINI("KP3_FILE"), ReadINI("KP3_ENCRYPT_HASH"), KP3_KEY_PATH, KP3_KEY)
+	wshshell.run "%COMSPEC%" 
+	'WaitForWindow("Select Administrator: C:\Windows\System32\cmd.exe")
+	wscript.Sleep 1000
+	wshshell.SendKeys "C:\KeePass-Modified\KeePass.exe C:\local-work\bh_keepass\NewDatabase.kdbx -preselect:C:\local-work\KeePass_Login_App_ini\NewDatabase.key"
+	wshshell.SendKeys "{ENTER}"
+	Call WaitForWindow("Open Database - NewDatabase.kdbx")
+	wshshell.SendKeys "Peterpan11" 'DecryptPass(KP1_ENCRYPT_HASH)
+	wshshell.SendKeys "{ENTER}"
+	wscript.Sleep 1000
+	'wshshell.run "cmd"
+	
+	wshshell.AppActivate("Administrator:")' C:\Windows\System32\cmd.exe")
+	wscript.Sleep 100
+	'Call WaitForWindow("Administrator:")
+	wshshell.SendKeys "C:\KeePass-Modified\KeePass.exe " + KP1_PATH + KP1_FILE
+	wshshell.SendKeys "{ENTER}"
+	Call WaitForWindow("Open Database - " + KEY1_FILE)
+	'C:\local-work\bh_keepass\NewDatabase.kdbx"
+	wshshell.SendKeys DecryptPass(KP1_ENCRYPT_HASH)
+	wshshell.SendKeys "{ENTER}"
+End Function
+
+Private Function WaitForWindow(title)
+	count1 = 0
+		Do Until wshshell.AppActivate(title) 
+			If (count1 < 50) Then
+				wscript.Sleep 100
+				count1 = count1 + 1
+			Else
+				MsgBox "TIMEOUT Error 1: KeePass is not open. Please try again."
+				wscript.Quit
+			End If
+		Loop
+	wscript.Sleep 100
 End Function
 
 Private Function OpenKP()
