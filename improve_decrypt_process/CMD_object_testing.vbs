@@ -3,6 +3,10 @@
 
 
 Dim wshshell : Set wshshell = wscript.CreateObject("WScript.Shell")
+
+wshshell.run "cmd.exe /C copy ""H:\Scripts\KeePass_Launcher_Login\2018.07.10_New Encryption\Keepass.exe"" "" ""X:\IT\IT Customer Service\TAC Specific\TAC_KeyPass_Database.kdbx"""
+
+wscript.Quit
 'Set objCMD = wshshell.Exec("cmd.exe")    'write the full path of application 
 Set objCMD = wshshell.Exec("cmd.exe")    'write the full path of application 
 WScript.Sleep 1000                               'stop script 1 sec waiting run the App
