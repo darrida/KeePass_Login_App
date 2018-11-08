@@ -1,12 +1,14 @@
-Dim objFile, DecryptFile, DecryptFileLoc
+Dim objFile, DecryptFile, DecryptFileLoc, CMD_processID, objCMD, oCMD, KPLocation
 Set wshshell = wscript.createObject("wscript.shell")
 Set objFSO = wscript.CreateObject("Scripting.FileSystemObject")
 Set objFSOReader = wscript.CreateObject("Scripting.FileSystemObject")
 
-KPLocation = ReadINI("KEEPASS_PATH")
-KPFileName = ReadINI("KEEPASS_APP")
 DecryptFileLoc = ReadINI("DECRYPT_FILE_PATH")
 DecryptFile = ReadINI("DECRYPT_FILE")
+KEEPASS_PATH = ReadINI("KEEPASS_PATH")
+KEEPASS_PATH_ALT = ReadINI("KEEPASS_PATH_ALT")
+KEEPASS_PATH_SYS = ReadINI("KEEPASS_PATH_SYS")
+KPFileName = ReadINI("KEEPASS_APP")
 
 KP1_PATH = ReadINI("KP1_PATH")
 KP1_FILE = ReadINI("KP1_FILE")
@@ -25,23 +27,29 @@ KP3_KEY = ReadINI("KP3_KEY")
 Call main()
 
 Private Function main()
+	Call DetermineKPPath()
 	Call DecryptFileExistOpen()
-	wshshell.run "%COMSPEC%" 
-	
 	Call KP_LOGIN(KP1_PATH, KP1_FILE, KP1_ENCRYPT_HASH)
 	Call KP_LOGIN(KP2_PATH, KP2_FILE, KP2_ENCRYPT_HASH)
 	Call KP_LOGIN_KEY(KP3_PATH, KP3_FILE, KP3_ENCRYPT_HASH, KP3_KEY_PATH, KP3_KEY)
-	
-	wshshell.AppActivate("Administrator:")
-	wshshell.SendKeys "exit" & "{ENTER}"
+End Function
+
+Private Function DetermineKPPath()
+	If (objFSO.FileExists(KEEPASS_PATH + KPFileName)) Then
+		KPLocation = KEEPASS_PATH
+	ElseIf (objFSO.FileExists(KEEPASS_PATH_ALT + KPFileName)) Then
+		KPLocation = KEEPASS_PATH_ALT
+	ElseIf (objFSO.FileExists(KEEPASS_PATH_SYS + KPFileName)) Then
+		KPLocation = KEEPASS_PATH_SYS
+	Else
+		MsgBox "Unable to find KeePass.exe."
+		wscript.Quit
+	End If
 End Function
 
 Private Function KP_LOGIN_KEY(path, file, password, key_path, key_file)
 	If (path <> "") Then
-		wshshell.AppActivate("Administrator:")
-		wscript.Sleep 1000
-		wshshell.SendKeys chr(34) + KPLocation + KPFileName + chr(34) + " " + chr(34) + path + file + chr(34) + " -preselect:" + chr(34) + key_path + key_file + chr(34)
-		wshshell.SendKeys "{ENTER}"
+		wshshell.run (chr(34) + KPLocation + KPFileName + chr(34) + chr(34) + path + file + chr(34) + " -preselect:" + chr(34) + key_path + key_file + chr(34))
 		Call WaitForWindow("Open Database - " + file)
 		Call Paste(DecryptPass(password))
 		wshshell.SendKeys "{ENTER}"
@@ -51,10 +59,7 @@ End Function
 
 Private Function KP_LOGIN(path, file, password)
 	If (path <> "") Then
-		wshshell.AppActivate("Administrator:")
-		wscript.Sleep 1000
-		wshshell.SendKeys chr(34) + KPLocation + KPFileName + chr(34) + " " + chr(34) + path + file + chr(34)
-		wshshell.SendKeys "{ENTER}"
+		wshshell.run (chr(34) + KPLocation + KPFileName + chr(34) + chr(34) + path + file + chr(34))
 		Call WaitForWindow("Open Database - " + file)
 		Call Paste(DecryptPass(password))
 		wshshell.SendKeys "{ENTER}"
@@ -88,7 +93,7 @@ End Function
 Private Function WaitForWindow(title)
 	count1 = 0
 		Do Until wshshell.AppActivate(title) 
-			If (count1 < 50) Then
+			If (count1 < 100) Then
 				wscript.Sleep 100
 				count1 = count1 + 1
 			Else
@@ -96,7 +101,7 @@ Private Function WaitForWindow(title)
 				wscript.Quit
 			End If
 		Loop
-	wscript.Sleep 1000
+	wscript.Sleep 100
 End Function
 
 Private Function DecryptFileExistOpen()
