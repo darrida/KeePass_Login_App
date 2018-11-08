@@ -22,7 +22,24 @@ KP3_ENCRYPT_HASH = ReadINI("KP3_ENCRYPT_HASH")
 KP3_KEY_PATH = ReadINI("KP3_KEY_PATH")
 KP3_KEY = ReadINI("KP3_KEY")
 
-Call main()
+
+Call DecryptFileExistOpen()
+KeyEnd = inputbox("try me")
+Dim Test
+Set Test = (New DecryptClass)(KP1_ENCRYPT_HASH, KeyEnd)
+Test.show
+wscript.Quit
+
+call Include("Decrypt_pass_v4.vbs")
+
+Sub Include (Scriptnaam)
+  Dim oFile
+  Set oFile = objFSO.OpenTextFile(Scriptnaam)
+  ExecuteGlobal oFile.ReadAll()
+  oFile.Close
+End Sub
+
+'Call main()
 
 Private Function main()
 	Call DecryptFileExistOpen()
