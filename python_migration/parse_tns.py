@@ -1,13 +1,19 @@
 # coding: utf-8
-
-import re
-
+#########################################################
+# SETUP (since I don't have a setup.py file):
+# (1) Place parse_tns.py into %python%\Lib\site-packages\
+# (2) Load with "import parse_tns" or "import parse_tns as pt"
+#
 # EXAMPLE USAGE: 
 # (1) Declare variables for the SID of the server and the directory that contains tnsnames.ora
 # (2) Pass variables into the parse_tnsnames() function. See the following three lines.
+#
 # SID = "PPRD"
 # tnsnames_path = ""
 # Call parse_tnsnames(tnsnames_path, SID)
+#########################################################
+
+import re
 
 def parse_tnsnames(tnsnames_path, server):
     lines_tested = 0
